@@ -34,9 +34,9 @@ workshop_data = DataGenerator(
     ['lunch', 'lecture', 'ceo meeting', 'seminar', 'sport event'],
     ['nice event', 'some meeting', 'emergency meeting', 'be happy', 'do not be sad'],
     ['Mister Someone', 'Zdzisiek', 'Wojtek', 'Happy Person', 'Another Person'],
-    True,
-    False
+    False,
+    True
 )
 
-workshops = event_data.generate_data(50)
+workshops = workshop_data.generate_data(50)
 workshop_data.save_data(workshops, 'workshop_data.json')

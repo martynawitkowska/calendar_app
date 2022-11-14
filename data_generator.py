@@ -19,7 +19,7 @@ class DataGenerator:
         for idx in range(amount):
             event = {
                 'idx': idx,
-                'start_date': f'{self.beginning_date + datetime.timedelta(hours=random.randint(1, 5000)):%Y/%m/%b, %H:%M}',
+                'start_date': f'{self.beginning_date + datetime.timedelta(hours=random.randint(1, 5000)):%Y/%m/%d, %H:%M}',
                 'duration': random.randint(*self.durations),
                 'title': random.choice(self.titles),
                 'description': random.choice(self.descriptions),
@@ -27,10 +27,10 @@ class DataGenerator:
             }
 
             if self.reminder:
-                event['reminder'] = random.choice([True, False])
+                event['remind'] = random.choice([True, False])
 
             if self.workshop:
-                event['workshop'] = random.choices(self.users, k=random.randint(2, 20))
+                event['participants'] = random.choices(self.users, k=random.randint(2, 20))
 
             events.append(event)
 
