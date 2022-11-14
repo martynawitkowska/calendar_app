@@ -26,7 +26,7 @@ class Event:
 
     @property
     def start_date(self):
-        return f'{self._start_date:%A %b %y, %H:%M}'
+        return self._start_date
 
     @start_date.setter
     def start_date(self, new_start_date):
