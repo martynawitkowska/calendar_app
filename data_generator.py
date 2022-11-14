@@ -1,6 +1,6 @@
 import datetime
 import random
-from pprint  import pprint as pp
+import json
 
 
 class DataGenerator:
@@ -19,7 +19,7 @@ class DataGenerator:
         for idx in range(amount):
             event = {
                 'idx': idx,
-                'start_date': self.beginning_date + datetime.timedelta(hours=random.randint(1, 5000)),
+                'start_date': f'{self.beginning_date + datetime.timedelta(hours=random.randint(1, 5000)):%Y/%m/%b, %H:%M}',
                 'duration': random.randint(*self.durations),
                 'title': random.choice(self.titles),
                 'description': random.choice(self.descriptions),
@@ -34,16 +34,9 @@ class DataGenerator:
 
             events.append(event)
 
-        pp(events)
+        return events
 
-
-d = DataGenerator(
-    datetime.date.today() + datetime.timedelta(days=12),
-    (15, 180),
-    ['lunch', 'lecture', 'ceo meeting', 'seminar', 'sport event'],
-    ['nice event', 'some meeting', 'emergency meeting', 'be happy', 'do not be sad'],
-    ['Mister Someone', 'Zdzisiek', 'Wojtek', 'Happy Person', 'Another Person'],
-    False,
-    True
-)
-d.generate_data(50)
+    @staticmethod
+    def save_data(data, path):
+        with open(path, 'w') as file:
+            json.dump(data, file)

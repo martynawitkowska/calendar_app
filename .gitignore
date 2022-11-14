@@ -5,3 +5,4 @@
 **/*.pyc
 venv
 
+*_data.json

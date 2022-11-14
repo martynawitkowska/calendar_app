@@ -2,7 +2,8 @@ from datetime import datetime, timedelta
 
 
 class Event:
-    def __init__(self, start_date, duration, title, description, owner):
+    def __init__(self, idx, start_date, duration, title, description, owner):
+        self.idx = idx
         self.owner = owner
         self.description = description
         self.title = title
