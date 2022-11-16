@@ -48,7 +48,67 @@ class Calendar:
 
         return events
 
+    def _filter_by_duration(self, **kwargs):
+        events = []
 
+        for event in self._events:
+            attr = getattr(event, 'duration', None)
+            if attr and attr in range(kwargs.get('min', 0), kwargs.get('max', attr + 1)):
+                events.append(event)
+
+        return events
+
+    def _filter_by_title(self, **kwargs):
+        events = []
+
+        for event in self._events:
+            attr = getattr(event, 'title', None)
+            if attr and kwargs.get('search_text', '') in attr:
+                events.append(event)
+
+        return events
+
+    def _filter_by_description(self, **kwargs):
+        events = []
+
+        for event in self._events:
+            attr = getattr(event, 'description', None)
+            if attr and kwargs.get('search_text', '') in attr:
+                events.append(event)
+
+        return events
+
+    def _filter_by_owner(self, **kwargs):
+        events = []
+
+        for event in self._events:
+            attr = getattr(event, 'owner', None)
+            if attr and kwargs.get('search_name', '') in attr:
+                events.append(event)
+
+        return events
+
+    def _filter_by_participants(self, **kwargs):
+        events = []
+
+        for event in self._events:
+            attr = getattr(event, 'participants', None)
+            if attr and kwargs.get('search_name', '') in attr:
+                events.append(event)
+
+        return events
+
+    def filter(self, filter_name='duration', **kwargs):
+        options = {
+            'duration': self._filter_by_duration,
+            'title': self._filter_by_title,
+            'description': self._filter_by_description,
+            'owner': self._filter_by_owner,
+            'participants': self._filter_by_participants
+
+        }
+
+        return options.get(filter_name)(**kwargs)
 
     def __len__(self):
         return len(self._events)
@@ -58,7 +118,7 @@ data = generate_objects()
 
 calendar = Calendar(data)
 # f = calendar.filter_by_date(datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(weeks=2))
-c = calendar.filter_by_duration(duration_min=15, duration_max=20, duration=15)
+c = calendar.filter('participants', search_name='Wojtek')
 
 # f = calendar.filter_by_date()
 
