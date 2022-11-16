@@ -26,6 +26,14 @@ class Calendar:
 
         self._events.append(value)
 
+    @staticmethod
+    def sort_by_date(fn):
+        def inner(*args, **kwargs):
+            events = fn(*args, **kwargs)
+            return sorted(events, key=lambda x: x.start_date)
+
+        return inner
+
     def filter_by_date(self, start_date=datetime.datetime.min, end_date=datetime.datetime.max):
         events = []
 
@@ -98,6 +106,7 @@ class Calendar:
 
         return events
 
+    @sort_by_date
     def filter(self, filter_name='duration', **kwargs):
         options = {
             'duration': self._filter_by_duration,
@@ -110,6 +119,15 @@ class Calendar:
 
         return options.get(filter_name)(**kwargs)
 
+    def remove(self, idx):
+        events = list(filter(lambda x: x.idx == idx, self._events))
+
+        if not events:
+            raise ValueError(f'Provided idx: {idx} does not appear to exist in this calendar')
+
+        for event in events:
+            self._events.remove(event)
+
     def __len__(self):
         return len(self._events)
 
@@ -118,12 +136,14 @@ data = generate_objects()
 
 calendar = Calendar(data)
 # f = calendar.filter_by_date(datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(weeks=2))
-c = calendar.filter('participants', search_name='Wojtek')
+c = calendar.filter('duration', max=18)
 
 # f = calendar.filter_by_date()
 
 # pprint(f)
 pprint(c)
+print(len(calendar))
+print(calendar.remove(3))
+print(len(calendar))
 # pprint(len(calendar))
 # pprint(calendar.events)
-
