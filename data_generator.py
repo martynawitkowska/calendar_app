@@ -43,5 +43,5 @@ class DataGenerator:
 
     @staticmethod
     def load_data(path):
-        with open(path) as file:
+        with open(path, 'r') as file:
             return json.load(file)
