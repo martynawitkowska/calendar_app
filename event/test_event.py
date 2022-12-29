@@ -28,7 +28,7 @@ def test_duration_positive(event):
     assert event.duration == 20
 
 
-def test_duration_invalid_type_should_raise_type_error():
+def test_duration_invalid_type_raise_type_error():
     with pytest.raises(TypeError) as excinfo:
         e = Event(1, datetime.now() + timedelta(3), '5', '', '', '')
 
