@@ -11,12 +11,18 @@ from event import Event
 def stub_events():
     stub_event_1 = Mock(Event)
     stub_event_1.start_date = datetime.now().replace(microsecond=0) + timedelta(days=3)
+    stub_event_1.duration = 25
     stub_event_2 = Mock(Event)
     stub_event_2.start_date = datetime.now().replace(microsecond=0) + timedelta(weeks=5)
+    stub_event_2.duration = 30
     stub_event_3 = Mock(Event)
     stub_event_3.start_date = datetime.now().replace(microsecond=0) + timedelta(days=4)
+    stub_event_3.duration = 50
+    stub_event_4 = Mock(Event)
+    stub_event_4.start_date = datetime.now().replace(microsecond=0) + timedelta(weeks=5)
+    stub_event_4.duration = 45
 
-    return [stub_event_1, stub_event_2, stub_event_3]
+    return [stub_event_1, stub_event_2, stub_event_3, stub_event_4]
 
 
 @pytest.fixture
@@ -46,3 +52,10 @@ def test_add_new_event_positive(stub_events, stub_event):
     calendar.events = stub_event
 
     assert calendar.events == 'You have 3 events in four upcoming weeks.'
+
+
+def testt_filter_method_with_duration_option(stub_events):
+    calendar = Calendar(stub_events)
+    sorted_events = calendar.filter('duration', min=28, max=47)
+
+    assert sorted_events == [stub_events[1], stub_events[3]]
