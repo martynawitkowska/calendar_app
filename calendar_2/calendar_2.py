@@ -1,8 +1,6 @@
 import datetime
-from pprint import pprint
 
 from event import Event, Workshop, Reminder
-from helpers import generate_objects
 
 
 class Calendar:
