@@ -7,7 +7,7 @@ from event import Event
 
 @pytest.fixture
 def event():
-    return Event(1, datetime.now() + timedelta(hours=3), 20, '', '', '')
+    return Event(1, datetime.now().replace(microsecond=0) + timedelta(hours=3), 20, '', '', '')
 
 
 def test_duration_less_than_ten_minutes_raise_value_error():
@@ -57,3 +57,13 @@ def test_start_date_invalid_type_raise_type_error():
 
 def test_start_date_positive(event):
     assert f'{event.start_date:%A %b %y, %H:%M}' == f'{datetime.now() + timedelta(hours=3):%A %b %y, %H:%M}'
+
+
+def test_dunder_str_of_class_event(event):
+    assert f'{event!s}' == f', {datetime.now() + timedelta(hours=3):%A %b %y, %H:%M},' \
+                           f' {(datetime.now() + timedelta(hours=3, minutes=20)):%A %b %y, %H:%M}'
+
+
+def test_dunder_repr_of_class_event(event):
+    assert f'{event!r}' == f"Event(idx=1, owner='', description='', title=''," \
+                           f" duration=20, start_date={datetime.now().replace(microsecond=0) + timedelta(hours=3)!r})"

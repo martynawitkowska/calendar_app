@@ -39,10 +39,10 @@ class Event:
         self._start_date = new_start_date
 
     def __str__(self):
-        return f'{self.title}, {self.start_date},' \
+        return f'{self.title}, {self.start_date:%A %b %y, %H:%M},' \
                f' {(self._start_date + timedelta(minutes=self.duration)):%A %b %y, %H:%M}'
 
     def __repr__(self):
         attrs = ', '.join(
             f'{key[1:] if key.startswith("_") else key}={repr(value)}' for key, value in vars(self).items())
-        return f'{type(self).__name__}("{attrs})'
+        return f'{type(self).__name__}({attrs})'
