@@ -32,9 +32,12 @@ def stub_event():
     return event
 
 
-def test_events_getter(stub_events):
-    calendar = Calendar(stub_events)
+@pytest.fixture
+def calendar(stub_events):
+    return Calendar(stub_events)
 
+
+def test_events_getter(calendar):
     assert calendar.events == 'You have 2 events in four upcoming weeks.'
 
 
@@ -43,19 +46,32 @@ def test_new_event_invalid_type_raise_type_error():
         event = 'New event of wrong type'
         calendar = Calendar()
         calendar.events = event
-
         assert 'should be of type Event, Workshop or Reminder' in excinfo.value
 
 
-def test_add_new_event_positive(stub_events, stub_event):
-    calendar = Calendar(stub_events)
+def test_add_new_event_positive(calendar, stub_event):
     calendar.events = stub_event
-
     assert calendar.events == 'You have 3 events in four upcoming weeks.'
 
 
-def testt_filter_method_with_duration_option(stub_events):
-    calendar = Calendar(stub_events)
+def testt_filter_method_with_duration_option(calendar, stub_events):
     sorted_events = calendar.filter('duration', min=28, max=47)
-
     assert sorted_events == [stub_events[1], stub_events[3]]
+
+
+def test_filter_by_date_with_existing_dates(calendar, stub_events):
+    filtered_events = calendar.filter_by_date(
+        start_date=datetime.now().replace(microsecond=0) + timedelta(days=3),
+        end_date=datetime.now().replace(microsecond=0) + timedelta(days=5))
+    assert filtered_events == [stub_events[0], stub_events[2]]
+
+
+def test_filter_by_date_with_non_existing_start_date(calendar, stub_events):
+    filtered_events = calendar.filter_by_date(start_date=datetime.now().replace(microsecond=0) + timedelta(weeks=7))
+    assert filtered_events == []
+
+
+def test_filter_by_date_without_params(calendar, stub_events):
+    filtered_events = calendar.filter_by_date()
+
+    assert filtered_events == [stub_events[0], stub_events[1], stub_events[2], stub_events[3]]
