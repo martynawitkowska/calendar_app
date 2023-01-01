@@ -54,11 +54,6 @@ def test_add_new_event_positive(calendar, stub_event):
     assert calendar.events == 'You have 3 events in four upcoming weeks.'
 
 
-def testt_filter_method_with_duration_option(calendar, stub_events):
-    sorted_events = calendar.filter('duration', min=28, max=47)
-    assert sorted_events == [stub_events[1], stub_events[3]]
-
-
 def test_filter_by_date_with_existing_dates(calendar, stub_events):
     filtered_events = calendar.filter_by_date(
         start_date=datetime.now().replace(microsecond=0) + timedelta(days=3),
@@ -99,3 +94,28 @@ def test_filter_by_duration_with_duration_min_and_duration_max_params(calendar, 
 def test_filter_by_duration_with_duration_param(calendar, stub_events):
     filtered_events = calendar.filter_by_duration(duration=50)
     assert filtered_events == [stub_events[2]]
+
+
+def test_filter_with_duration_option_with_min_and_max_params(calendar, stub_events):
+    filtered_events = calendar.filter('duration', min=28, max=47)
+    assert filtered_events == [stub_events[1], stub_events[3]]
+
+
+def test_filter_with_duration_option_and_min_param(calendar, stub_events):
+    filtered_events = calendar.filter('duration', min=28)
+    assert filtered_events == [stub_events[2], stub_events[1], stub_events[3]]
+
+
+def test_filter_with_duration_option_and_max_param(calendar, stub_events):
+    filtered_events = calendar.filter('duration', max=31)
+    assert filtered_events == [stub_events[0], stub_events[1]]
+
+
+def test_filter_with_duration_option_and_no_params(calendar, stub_events):
+    filtered_events = calendar.filter('duration')
+    assert filtered_events == [stub_events[0], stub_events[2], stub_events[1], stub_events[3]]
+
+
+def test_filter_with_no_params(calendar, stub_events):
+    filtered_events = calendar.filter()
+    assert filtered_events == [stub_events[0], stub_events[2], stub_events[1], stub_events[3]]
