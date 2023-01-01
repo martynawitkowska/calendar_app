@@ -73,5 +73,29 @@ def test_filter_by_date_with_non_existing_start_date(calendar, stub_events):
 
 def test_filter_by_date_without_params(calendar, stub_events):
     filtered_events = calendar.filter_by_date()
-
     assert filtered_events == [stub_events[0], stub_events[1], stub_events[2], stub_events[3]]
+
+
+def test_filter_by_duration_without_params(calendar, stub_events):
+    filtered_events = calendar.filter_by_duration()
+    assert filtered_events == [stub_events[0], stub_events[1], stub_events[2], stub_events[3]]
+
+
+def test_filter_by_duration_with_duration_min_param(calendar, stub_events):
+    filtered_events = calendar.filter_by_duration(duration_min=30)
+    assert filtered_events == [stub_events[1], stub_events[2], stub_events[3]]
+
+
+def test_filter_by_duration_with_duration_max_param(calendar, stub_events):
+    filtered_events = calendar.filter_by_duration(duration_max=30)
+    assert filtered_events == [stub_events[0], stub_events[1]]
+
+
+def test_filter_by_duration_with_duration_min_and_duration_max_params(calendar, stub_events):
+    filtered_events = calendar.filter_by_duration(duration_min=30, duration_max=45)
+    assert filtered_events == [stub_events[1], stub_events[3]]
+
+
+def test_filter_by_duration_with_duration_param(calendar, stub_events):
+    filtered_events = calendar.filter_by_duration(duration=50)
+    assert filtered_events == [stub_events[2]]
