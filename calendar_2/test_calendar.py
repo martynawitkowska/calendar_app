@@ -9,16 +9,16 @@ from event import Event, Workshop
 
 @pytest.fixture
 def stub_events():
-    stub_event_1 = Mock(Event, title='event 1', description='Very interesting description', owner='John')
+    stub_event_1 = Mock(Event, idx=1, title='event 1', description='Very interesting description', owner='John')
     stub_event_1.start_date = datetime.now().replace(microsecond=0) + timedelta(days=3)
     stub_event_1.duration = 25
-    stub_event_2 = Mock(Event, title='event 2', description='Another interesting story', owner='John')
+    stub_event_2 = Mock(Event, idx=2, title='event 2', description='Another interesting story', owner='John')
     stub_event_2.start_date = datetime.now().replace(microsecond=0) + timedelta(weeks=5)
     stub_event_2.duration = 30
-    stub_event_3 = Mock(Event, title='meeting 3', description='Meet with John', owner='Mary')
+    stub_event_3 = Mock(Event, idx=3, title='meeting 3', description='Meet with John', owner='Mary')
     stub_event_3.start_date = datetime.now().replace(microsecond=0) + timedelta(days=4)
     stub_event_3.duration = 50
-    stub_event_4 = Mock(Event, title='event 4', description='This is another thing', owner='Mary')
+    stub_event_4 = Mock(Event, idx=4, title='event 4', description='This is another thing', owner='Mary')
     stub_event_4.start_date = datetime.now().replace(microsecond=0) + timedelta(weeks=5)
     stub_event_4.duration = 45
 
@@ -197,3 +197,21 @@ def test_filter_with_participants_option_and_partial_search_name_param(stub_work
     calendar = Calendar(stub_workshops)
     filtered_workshops = calendar.filter('participants', search_name='mily')
     assert filtered_workshops == []
+
+
+@pytest.mark.xfail(raises=ValueError)
+def test_remove_raise_value_error_xfail(calendar):
+    assert calendar.remove(5)
+
+
+def test_remove_raise_value_error_pytest_raises(calendar):
+    with pytest.raises(ValueError) as excinfo:
+        calendar.remove(5)
+        assert 'Provided idx: 5 does not appear to exist in this calendar' in excinfo.value
+
+
+
+def test_remove_positive(calendar, stub_events):
+    calendar.remove(2)
+    get_events = calendar.filter('duration')
+    assert get_events == [stub_events[0], stub_events[1], stub_events[2]]
