@@ -9,16 +9,16 @@ from event import Event
 
 @pytest.fixture
 def stub_events():
-    stub_event_1 = Mock(Event)
+    stub_event_1 = Mock(Event, title='event 1')
     stub_event_1.start_date = datetime.now().replace(microsecond=0) + timedelta(days=3)
     stub_event_1.duration = 25
-    stub_event_2 = Mock(Event)
+    stub_event_2 = Mock(Event, title='event 2')
     stub_event_2.start_date = datetime.now().replace(microsecond=0) + timedelta(weeks=5)
     stub_event_2.duration = 30
-    stub_event_3 = Mock(Event)
+    stub_event_3 = Mock(Event, title='meeting 3')
     stub_event_3.start_date = datetime.now().replace(microsecond=0) + timedelta(days=4)
     stub_event_3.duration = 50
-    stub_event_4 = Mock(Event)
+    stub_event_4 = Mock(Event, title='event 4')
     stub_event_4.start_date = datetime.now().replace(microsecond=0) + timedelta(weeks=5)
     stub_event_4.duration = 45
 
@@ -119,3 +119,19 @@ def test_filter_with_duration_option_and_no_params(calendar, stub_events):
 def test_filter_with_no_params(calendar, stub_events):
     filtered_events = calendar.filter()
     assert filtered_events == [stub_events[0], stub_events[2], stub_events[1], stub_events[3]]
+
+
+def test_filter_with_title_option_and_no_params(calendar, stub_events):
+    filtered_events = calendar.filter('title')
+    assert filtered_events == [stub_events[0], stub_events[2], stub_events[1], stub_events[3]]
+
+
+def test_filter_with_title_option_and_full_search_text(calendar, stub_events):
+    filtered_events = calendar.filter('title', search_text='event 1')
+    assert filtered_events == [stub_events[0]]
+
+
+def test_filter_with_title_option_and_not_full_search_text(calendar, stub_events):
+    filtered_events = calendar.filter('title', search_text='ev')
+    assert filtered_events == [stub_events[0], stub_events[1], stub_events[3]]
+
