@@ -4,7 +4,7 @@ from unittest.mock import Mock
 import pytest
 
 from calendar_2 import Calendar
-from event import Event
+from event import Event, Workshop
 
 
 @pytest.fixture
@@ -23,6 +23,21 @@ def stub_events():
     stub_event_4.duration = 45
 
     return [stub_event_1, stub_event_2, stub_event_3, stub_event_4]
+
+
+@pytest.fixture
+def stub_workshops():
+    stub_date = datetime.now().replace(microsecond=0)
+    stub_workshop_1 = Mock(Workshop, start_date=stub_date + timedelta(days=3),
+                           participants=['Emily', 'John', 'Mary', 'George'])
+    stub_workshop_2 = Mock(Workshop, start_date=stub_date + timedelta(days=8),
+                           participants=['Misha', 'Adam', 'Anna', 'Kate'])
+    stub_workshop_3 = Mock(Workshop, start_date=stub_date + timedelta(weeks=5),
+                           participants=['Emily', 'Adam', 'Anna', 'Kate'])
+    stub_workshop_4 = Mock(Workshop, start_date=stub_date + timedelta(days=7),
+                           participants=['George', 'John', 'Adam', 'Kate'])
+
+    return [stub_workshop_1, stub_workshop_2, stub_workshop_3, stub_workshop_4]
 
 
 @pytest.fixture
@@ -164,3 +179,21 @@ def test_filter_with_owner_option_and_full_search_name_param(calendar, stub_even
 def test_filter_with_owner_option_and_partial_search_name_param(calendar, stub_events):
     filtered_events = calendar.filter('owner', search_name='ry')
     assert filtered_events == [stub_events[2], stub_events[3]]
+
+
+def test_filter_with_participants_option_and_no_params(stub_workshops):
+    calendar = Calendar(stub_workshops)
+    filtered_workshops = calendar.filter('participants')
+    assert filtered_workshops == []
+
+
+def test_filter_with_participants_option_and_full_search_name_param(stub_workshops):
+    calendar = Calendar(stub_workshops)
+    filtered_workshops = calendar.filter('participants', search_name='Mary')
+    assert filtered_workshops == [stub_workshops[0]]
+
+
+def test_filter_with_participants_option_and_partial_search_name_param(stub_workshops):
+    calendar = Calendar(stub_workshops)
+    filtered_workshops = calendar.filter('participants', search_name='mily')
+    assert filtered_workshops == []
