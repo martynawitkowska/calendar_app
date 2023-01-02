@@ -1,5 +1,7 @@
 import datetime
+from pprint import pprint
 
+from data_generator import DataGenerator
 from event import Event, Workshop, Reminder
 
 

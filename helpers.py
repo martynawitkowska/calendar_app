@@ -10,11 +10,10 @@ def generate_objects():
     data_obj = []
     files = ['event', 'reminder', 'workshop']
     for file in files:
-        data = DataGenerator.load_data(os.path.join(abs_path, '..', f'{file}_data.json'))
+        data = DataGenerator.load_data(os.path.join(abs_path, f'{file}_data.json'))
 
         for item in data:
             item['start_date'] = datetime.strptime(item['start_date'], '%Y/%m/%d, %H:%M')
-
             if 'remind' in item:
                 data_obj.append(Reminder(**item))
             elif 'participants' in item:
