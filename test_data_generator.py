@@ -1,40 +1,6 @@
-import io
 from datetime import timedelta, date
-from unittest.mock import Mock, patch
-
-import pytest
 
 from data_generator import DataGenerator
-
-
-@pytest.fixture
-def data_generator_workshop_false():
-    return DataGenerator(
-                beginning_date=date.today() + timedelta(days=12),
-                durations=(15, 180),
-                titles=['lunch', 'lecture'],
-                descriptions=['nice event', 'some meeting'],
-                users=['Mister Someone', 'John'],
-                reminder=True,
-                workshop=False)
-
-
-@pytest.fixture
-def data_generator_workshop_true():
-    return DataGenerator(
-                beginning_date=date.today() + timedelta(days=12),
-                durations=(15, 180),
-                titles=['lunch', 'lecture'],
-                descriptions=['nice event', 'some meeting'],
-                users=['Mister Someone', 'John'],
-                reminder=False,
-                workshop=True)
-
-
-@pytest.fixture
-def generated_data(data_generator_workshop_false):
-    return data_generator_workshop_false.generate_data(2)
-
 
 
 def test_create_data_generator_object():
