@@ -5,11 +5,6 @@ import pytest
 from event import Event
 
 
-@pytest.fixture
-def event():
-    return Event(1, datetime.now().replace(microsecond=0) + timedelta(hours=3), 20, '', '', '')
-
-
 def test_duration_less_than_ten_minutes_raise_value_error():
     with pytest.raises(ValueError) as excinfo:
         e = Event(1, datetime.now() + timedelta(3), 5, '', '', '')
