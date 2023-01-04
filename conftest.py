@@ -80,9 +80,3 @@ def data_generator_workshop_true():
                 users=['Mister Someone', 'John'],
                 reminder=False,
                 workshop=True)
-
-
-@pytest.fixture
-def generated_data(data_generator_workshop_false):
-    return data_generator_workshop_false.generate_data(2)
-
