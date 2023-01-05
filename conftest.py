@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta, date
 from unittest.mock import Mock
 
@@ -80,3 +81,41 @@ def data_generator_workshop_true():
                 users=['Mister Someone', 'John'],
                 reminder=False,
                 workshop=True)
+
+
+@pytest.fixture
+def test_events_path(tmp_path):
+    date = datetime.now().replace(microsecond=0) + timedelta(days=3)
+    test_event_json = [{"idx": 0,
+                        "start_date": f"{date:%Y/%m/%d, %H:%M}",
+                        "duration": 154,
+                        "title": "lunch",
+                        "description": "nice event",
+                        "owner": "Mister Someone"}]
+    test_reminder_json = [{"idx": 3,
+                           "start_date": f"{date:%Y/%m/%d, %H:%M}",
+                           "duration": 151,
+                           "title": "sport event",
+                           "description": "some meeting",
+                           "owner": "Another Person",
+                           "remind": True}]
+    test_workshop_json = [{"idx": 5,
+                           "start_date": f"{date:%Y/%m/%d, %H:%M}",
+                           "duration": 27,
+                           "title": "lecture",
+                           "description": "some meeting",
+                           "owner": "Happy Person",
+                           "participants": ["Wojtek", "Zdzisiek"]}]
+    path = tmp_path / 'sub'
+    path.mkdir()
+
+    file_1 = path / 'event_data.json'
+    file_1.write_text(json.dumps(test_event_json))
+
+    file_2 = path / 'reminder_data.json'
+    file_2.write_text(json.dumps(test_reminder_json))
+
+    file_3 = path / 'workshop_data.json'
+    file_3.write_text(json.dumps(test_workshop_json))
+
+    return path
