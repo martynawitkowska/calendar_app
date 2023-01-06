@@ -106,7 +106,7 @@ def test_events_path(tmp_path):
                            "description": "some meeting",
                            "owner": "Happy Person",
                            "participants": ["Wojtek", "Zdzisiek"]}]
-    path = tmp_path / 'sub'
+    path = tmp_path / 'test_directory'
     path.mkdir()
 
     file_1 = path / 'event_data.json'
