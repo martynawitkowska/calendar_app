@@ -1,2 +1,2 @@
-# Calendar OOP
+# Calendar App
 
